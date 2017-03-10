@@ -29,12 +29,6 @@ Example:
 ```
 Classes `valid` or `invalid` will be appended to the input.
 
-## Testing
-
-``` bash
-$ npm run test
-```
-
 ## Contributing
 
 Contributions are welcome, [thanks to y'all](https://github.com/appstract/:package_name/graphs/contributors) :)
