@@ -165,7 +165,6 @@ validate.install = function (Vue) {
         }
 
     });
-
 };
 
 if (typeof exports == "object") {
