@@ -74,6 +74,7 @@ validate.install = function (Vue) {
         bind: function () {
             // This is the initial data
             this.isInitial = true;
+            this.vm.$set('formIsValid', false);
 
             // Set the validation rules
             // from the expression
@@ -150,8 +151,17 @@ validate.install = function (Vue) {
             }
 
             this.isInitial = false;
+            this.setFormIsValid();
 
             return valid;
+        },
+
+        setFormIsValid: function () {
+            if (typeof this.vm.$get(errorBag) == 'object' && Object.keys(this.vm.$get(errorBag)).length > 0) {
+                this.vm.$set('formIsValid', false);
+            } else {
+                this.vm.$set('formIsValid', true);
+            }
         }
 
     });
