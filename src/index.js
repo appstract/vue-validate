@@ -73,8 +73,8 @@ validate.install = function (Vue) {
 
         bind: function () {
             // This is the initial data,
-            // so we don't have to validate it
-            this.validateInitial = true;
+            // set if we want to validate it
+            this.isInitial = true;
 
             // Set the validation rules
             // from the expression
@@ -82,7 +82,7 @@ validate.install = function (Vue) {
 
             // Bind the v-model to
             // the directive
-            if(this.params.vModel){
+            if (this.params.vModel) {
                 this.expression = this.params.vModel;
             } else {
                 this.expression = null;
@@ -92,12 +92,10 @@ validate.install = function (Vue) {
         update: function (value) {
             clearTimeout(validateTimer);
 
-            if(this.validateInitial) {
-                // skip the initial
-                this.validateInitial = false;
-            } else {
-                this.validate(value);
-            }
+            var vm = this;
+            Vue.nextTick(function () {
+                vm.validate(value);
+            })
         },
 
         validate: function (value) {
@@ -127,26 +125,33 @@ validate.install = function (Vue) {
                 Vue.delete(this.vm[errorBag], bagEntry);
             }
 
-            if(valid) {
+            if (valid) {
                 // instantly add the valid class
                 this.el.classList.add('valid');
                 this.el.classList.remove('invalid');
             } else {
                 // add the field to the errorbag
-                this.vm.$set(errorBag + '.' + bagEntry, false);
+                this.vm.$set(errorBag + '.' + bagEntry, true);
 
                 // instantly remove the valid class
                 this.el.classList.remove('valid');
 
-                // give a sec before adding invalid class
-                var vm = this;
-                validateTimer = setTimeout(function(){
-                    vm.el.classList.add('invalid');
-                }, 1000);
+                // Only add invalid class if the initial
+                // data is filled
+                if (!this.isInitial || typeof value != 'undefined') {
+                    var vm = this;
+
+                    // give a sec before adding the invalid class
+                    validateTimer = setTimeout(function(){
+                        vm.el.classList.add('invalid');
+                    }, 1000);
+                }
             }
 
+            this.isInitial = false;
+
             return valid;
-        },
+        }
 
     });
 
