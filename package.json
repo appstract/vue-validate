@@ -2,7 +2,7 @@
   "name": "v-validate",
   "version": "0.1.0",
   "description": "Input validation for Vue",
-  "main": "src/vvalidate.js",
+  "main": "src/v-validate.js",
   "scripts": {
     "lint": "eslint src"
   },

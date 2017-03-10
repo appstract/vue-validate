@@ -17,7 +17,7 @@ If you use webpack:
 ```js
 Vue.use(require('v-validate'));
 ```
-If you don't, just include 'vvalidate.js' somewhere in your page.
+If you don't, just include 'v-validate.js' somewhere in your page.
 
 ## Usage
 
