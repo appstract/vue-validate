@@ -47,7 +47,7 @@ var validators = {
         return value && value.length && value.length <= +arg;
     },
 
-    length: function (value) {
+    length: function (value, arg) {
         return value && value.length == +arg;
     },
 
@@ -72,8 +72,7 @@ validate.install = function (Vue) {
         params: ['v-model'],
 
         bind: function () {
-            // This is the initial data,
-            // set if we want to validate it
+            // This is the initial data
             this.isInitial = true;
 
             // Set the validation rules
@@ -91,8 +90,8 @@ validate.install = function (Vue) {
 
         update: function (value) {
             clearTimeout(validateTimer);
-
             var vm = this;
+
             Vue.nextTick(function () {
                 vm.validate(value);
             })
@@ -102,7 +101,9 @@ validate.install = function (Vue) {
             var valid = true;
 
             Object.keys(this.validateRules).forEach(function (rule) {
-                if (!validators[rule]) throw new Error('Unknown rule ' + rule);
+                if (!validators[rule]){
+                    throw new Error('Unknown rule ' + rule);
+                }
 
                 var ruleArgument = this.validateRules[rule];
 
@@ -112,7 +113,7 @@ validate.install = function (Vue) {
                         return valid = false;
                     }
                 } else {
-                    // type has a argument
+                    // type has argument
                     if(!validators[rule](value, ruleArgument)) {
                         return valid = false;
                     }
@@ -136,8 +137,8 @@ validate.install = function (Vue) {
                 // instantly remove the valid class
                 this.el.classList.remove('valid');
 
-                // Only add invalid class if the initial
-                // data is filled
+                // In case of the initial data, only add invalid class
+                // if data is filled
                 if (!this.isInitial || typeof value != 'undefined') {
                     var vm = this;
 
