@@ -3,7 +3,9 @@
 [![Latest Version on NPM](https://img.shields.io/npm/v/v-validate.svg?style=flat-square)](https://npmjs.com/package/v-validate)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 
-Input validation for Vue. Tested with Vue 1.0
+Input validation for Vue 1.0
+
+[![](https://gifyu.com/images/inaction.gif)](https://gifyu.com/image/SZQV)
 
 ## Install
 
@@ -27,6 +29,10 @@ Example:
 <input type="text" v-model="name" v-validate="{required: true, minLength: 5}">
 ```
 Classes `valid` or `invalid` will be appended to the input.
+
+## See it in action
+
+Play with the options in [JSFiddle](https://jsfiddle.net/2pyx98Lr/1/)
 
 ## Contributing
 
