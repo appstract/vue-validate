@@ -7,7 +7,6 @@ validate.config = {};
 
 var validators = {
     required: function (value) {
-        if (typeof value == 'boolean') return value;
         return !((value == null) || (value.length == 0));
     },
 
@@ -95,6 +94,10 @@ validate.install = function (Vue) {
                 clearTimeout(timers[this.identifier]);
             }
 
+            if (typeof value == 'undefined') {
+                value = '';
+            }
+
             var vm = this;
 
             Vue.nextTick(function () {
@@ -104,45 +107,51 @@ validate.install = function (Vue) {
 
         validate: function (value) {
             var valid = true;
+            var isRequired = (typeof this.validateRules['required'] != 'undefined' && this.validateRules['required']);
 
-            Object.keys(this.validateRules).forEach(function (rule) {
-                if (!validators[rule]){
-                    throw new Error('Unknown rule ' + rule);
-                }
+            // if empty, but not required
+            // it is still valid
+            if(!isRequired && value.length < 1) {
 
-                var ruleArgument = this.validateRules[rule];
+            } else {
+                // validate each rule
+                Object.keys(this.validateRules).forEach(function (rule) {
+                    if (!validators[rule]) {
+                        throw new Error('Unknown rule ' + rule);
+                    }
 
-                // type is boolean and it is true
-                if (typeof(ruleArgument) == 'boolean' && ruleArgument) {
-                    if(!validators[rule](value)) {
+                    var ruleArgument = this.validateRules[rule];
+
+                    // type is boolean and it is true
+                    if (typeof(ruleArgument) == 'boolean' && ruleArgument && !validators[rule](value)) {
+                        return valid = false;
+                    } else if(!validators[rule](value, ruleArgument)) {
+                        // type has argument
                         return valid = false;
                     }
-                } else {
-                    // type has argument
-                    if(!validators[rule](value, ruleArgument)) {
-                        return valid = false;
-                    }
-                }
-            }.bind(this));
+                }.bind(this));
+            }
 
-            if (typeof this.vm[errorBag] != "undefined") {
+            if (typeof this.vm[errorBag] != 'undefined') {
                 Vue.delete(this.vm[errorBag], this.identifier);
             }
 
+            // remove classes
+            this.el.classList.remove('valid');
+            this.el.classList.remove('invalid');
+
             if (valid) {
-                // instantly add the valid class
-                this.el.classList.add('valid');
-                this.el.classList.remove('invalid');
+                // add the valid class
+                if(value.length > 0) {
+                    this.el.classList.add('valid');
+                }
             } else {
                 // add the field to the errorbag
                 this.vm.$set(errorBag + '.' + this.identifier, true);
 
-                // instantly remove the valid class
-                this.el.classList.remove('valid');
-
                 // In case of the initial data, only add invalid class
                 // if data is filled
-                if (!this.isInitial || typeof value != 'undefined') {
+                if (! (this.isInitial && value.length < 1) ) {
                     var vm = this;
 
                     // give a sec before adding the invalid class
