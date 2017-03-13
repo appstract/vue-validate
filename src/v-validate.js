@@ -1,6 +1,6 @@
 var validate = {},
     errorBag = 'invalidFields',
-    validateTimer = null;
+    timers = {};
 
 // exposed global options
 validate.config = {};
@@ -83,19 +83,23 @@ validate.install = function (Vue) {
             // Bind the v-model to
             // the directive
             if (this.params.vModel) {
+                this.identifier = this.params.vModel.replace(/\./g, '_');
                 this.expression = this.params.vModel;
             } else {
-                this.expression = null;
+                console.error('No v-model on input');
             }
         },
 
         update: function (value) {
-            clearTimeout(validateTimer);
+            if (typeof timers[this.identifier] != 'undefined') {
+                clearTimeout(timers[this.identifier]);
+            }
+
             var vm = this;
 
             Vue.nextTick(function () {
                 vm.validate(value);
-            })
+            });
         },
 
         validate: function (value) {
@@ -121,10 +125,8 @@ validate.install = function (Vue) {
                 }
             }.bind(this));
 
-            var bagEntry = this.expression.replace(/\./g, '_');
-
             if (typeof this.vm[errorBag] != "undefined") {
-                Vue.delete(this.vm[errorBag], bagEntry);
+                Vue.delete(this.vm[errorBag], this.identifier);
             }
 
             if (valid) {
@@ -133,7 +135,7 @@ validate.install = function (Vue) {
                 this.el.classList.remove('invalid');
             } else {
                 // add the field to the errorbag
-                this.vm.$set(errorBag + '.' + bagEntry, true);
+                this.vm.$set(errorBag + '.' + this.identifier, true);
 
                 // instantly remove the valid class
                 this.el.classList.remove('valid');
@@ -144,9 +146,9 @@ validate.install = function (Vue) {
                     var vm = this;
 
                     // give a sec before adding the invalid class
-                    validateTimer = setTimeout(function(){
+                    timers[this.identifier] = setTimeout(function(){
                         vm.el.classList.add('invalid');
-                    }, 1000);
+                    }, 800);
                 }
             }
 
