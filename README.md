@@ -1,4 +1,4 @@
-# V-validate
+# Vue Validate
 
 [![Latest Version on NPM](https://img.shields.io/npm/v/v-validate.svg?style=flat-square)](https://npmjs.com/package/v-validate)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
