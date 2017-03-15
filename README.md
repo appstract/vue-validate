@@ -36,7 +36,7 @@ Play with the options in [JSFiddle](https://jsfiddle.net/2pyx98Lr/1/)
 
 ## Contributing
 
-Contributions are welcome, [thanks to y'all](https://github.com/appstract/:package_name/graphs/contributors) :)
+Contributions are welcome, [thanks to y'all](https://github.com/appstract/vue-validate/graphs/contributors) :)
 
 ## About Appstract
 
