@@ -90,6 +90,10 @@ validate.install = function (Vue) {
         },
 
         update: function (value) {
+            if (!this.vm) {
+                return;
+            }
+
             if (typeof timers[this.identifier] != 'undefined') {
                 clearTimeout(timers[this.identifier]);
             }
