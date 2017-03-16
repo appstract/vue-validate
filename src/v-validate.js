@@ -110,6 +110,10 @@ validate.install = function (Vue) {
         },
 
         validate: function (value) {
+            if (!this.vm) {
+                return;
+            }
+
             var valid = true;
             var isRequired = (typeof this.validateRules['required'] != 'undefined' && this.validateRules['required']);
 

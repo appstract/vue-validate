@@ -1,6 +1,6 @@
 {
   "name": "v-validate",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Input validation for Vue",
   "main": "src/v-validate.js",
   "scripts": {
